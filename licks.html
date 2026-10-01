@@ -8,60 +8,65 @@
     :root{
       --bg:#0d0e13; --tile:#171923; --tile2:#1f2230; --line:#2a2e40; --text:#f4f4f7;
       --muted:#9a9fb5; --blue:#5468ff; --green:#4ade80; --sand:#ffd9a0; --red:#ef4444;
+      --orange:#ffb86c;
     }
     *{box-sizing:border-box;margin:0}
+    html{scroll-behavior:smooth}
     body{
       font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text);
-      padding:18px;
+      padding:20px 14px 42px;
     }
-    .wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
-    .card{background:var(--tile);border:1px solid var(--line);border-radius:22px;padding:18px}
+    .wrap{max-width:1200px;margin:0 auto;display:grid;gap:18px}
+    .card{background:var(--tile);border:1px solid var(--line);border-radius:24px;padding:18px}
     h1,h2,h3{font-family:Georgia,serif;letter-spacing:-0.03em}
-    h1{font-size:clamp(2rem,5vw,3.2rem);margin-bottom:8px}
-    .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-    label{display:grid;gap:7px;color:var(--muted);font-size:0.9rem}
+    h1{font-size:clamp(2.2rem,5vw,3.2rem); margin-bottom:8px}
+    h2{font-size:1.25rem; margin-bottom:12px}
+    .topbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    label{display:grid;gap:7px;color:var(--muted);font-size:0.9rem;font-weight:600}
     input,select,button{font:inherit}
     input,select{
       width:100%; background:var(--tile2); color:var(--text); border:1px solid var(--line); border-radius:12px;
-      padding:10px 12px;
+      padding:11px 12px;
     }
     button{
-      border:0;border-radius:999px;padding:11px 18px;cursor:pointer;color:var(--text);background:var(--tile2);
+      border:0;border-radius:999px;padding:11px 16px;cursor:pointer;color:var(--text);background:var(--tile2);
       transition:transform .15s ease, opacity .15s ease;
     }
     button:hover{transform:translateY(-1px)}
-    .primary{background:var(--blue);color:white}
-    .danger{background:var(--red);color:white}
+    .primary{background:var(--blue);color:#fff}
+    .secondary{background:var(--tile2);color:var(--text)}
+    .danger{background:var(--red);color:#fff}
     .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
     .videoWrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
     #player{width:100%;height:100%}
-    .status{font-size:1.2rem;font-weight:700;color:var(--sand);min-height:30px}
-    .progress{height:8px;background:var(--tile2);border-radius:999px;overflow:hidden}
-    .progress span{display:block;height:100%;width:0%;background:var(--blue);transition:width .15s}
+    .status{font-size:1.25rem;font-weight:700;color:var(--sand);min-height:34px}
+    .progress{height:10px;background:var(--tile2);border-radius:999px;overflow:hidden;margin-top:8px}
+    .progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--orange));transition:width .15s}
     .licks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
-    .lick{background:var(--tile2);border:2px solid var(--line);border-left:6px solid var(--line);border-radius:18px;padding:14px;cursor:pointer;transition:all .15s}
+    .lick{background:var(--tile2); border:2px solid var(--line); border-left:6px solid var(--line); border-radius:18px; padding:14px; cursor:pointer; transition:all .15s; position:relative; overflow:hidden}
     .lick:hover{transform:translateY(-2px);border-color:var(--blue)}
-    .lick.active{border-color:var(--blue);background:rgba(84,104,255,.12)}
+    .lick.active{border-color:var(--blue);box-shadow:0 0 0 1px rgba(84,104,255,.25); background:rgba(84,104,255,.12)}
     .lick.easy{border-left-color:var(--green)}
     .lick.medium{border-left-color:var(--sand)}
     .lick.hard{border-left-color:var(--red)}
     .tag{display:inline-block;padding:4px 8px;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;margin-bottom:8px}
-    .tag.easy{background:var(--green);color:#0a190a}
+    .tag.easy{background:var(--green);color:#09150b}
     .tag.medium{background:var(--sand);color:#1b1306}
-    .tag.hard{background:var(--red);color:white}
+    .tag.hard{background:var(--red);color:#fff}
     .lick h3{font-size:1.25rem;margin-bottom:6px}
     .lick p{font-size:0.92rem;color:var(--muted);margin:0}
-    .meta{margin-top:8px;color:var(--muted);font-size:0.8rem;display:flex;justify-content:space-between;gap:8px}
-    @media (max-width:640px){body{padding:12px} .wrap{gap:12px} .card{padding:14px}}
+    .meta{margin-top:10px;display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:0.8rem}
+    .helper{color:var(--muted);font-size:0.92rem}
+    @media (max-width:640px){body{padding:12px} .card{padding:14px} .row{display:grid;grid-template-columns:1fr 1fr} .row button{width:100%}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <h1>Blues licks practice</h1>
-      <div class="controls">
+      <div class="topbar">
         <label>
-          Repetitions
+          Repetitions per lick
           <input id="reps" type="number" min="1" max="30" value="10">
         </label>
         <label>
@@ -80,19 +85,21 @@
     </div>
 
     <div class="card">
-      <div class="status" id="status">Select a lick</div>
+      <div class="status" id="status">Select a lick to begin</div>
       <div class="progress" aria-label="practice progress"><span id="progress"></span></div>
       <div class="row" style="margin-top:14px;">
-        <button class="primary" id="playSelected">Play selected</button>
-        <button id="startLoop">Start 10x loop</button>
-        <button id="pauseBtn">Pause</button>
+        <button class="primary" id="previewBtn">Preview</button>
+        <button class="secondary" id="startBtn">Start 10x loop</button>
+        <button class="secondary" id="nextBtn">Next lick</button>
+        <button class="secondary" id="pauseBtn">Pause</button>
         <button class="danger" id="stopBtn">Stop</button>
       </div>
     </div>
 
     <div class="card">
-      <h2>Easy → hard</h2>
-      <div id="licks" class="licks"></div>
+      <h2>Practice order: easy → hard</h2>
+      <p class="helper">Start with the first easiest lick and move up. Keep the repetitions controlled and clean.</p>
+      <div id="licks" class="licks" style="margin-top:12px"></div>
     </div>
 
     <div class="card">
@@ -104,6 +111,7 @@
 
   <script>
     const VIDEO_ID = 'Sp6Dk9w0Z1U';
+
     const licks = [
       { id: 1, name: 'Lick 1', level: 'easy', start: 0.0, end: 6.0, note: 'Basic pentatonic motion' },
       { id: 2, name: 'Lick 2', level: 'easy', start: 6.0, end: 12.0, note: 'Simple bend and release' },
@@ -117,17 +125,26 @@
     ];
 
     let selected = licks[0];
+    let selectedIndex = 0;
     let player = null;
     let loopTimer = null;
     let loopRunning = false;
-    let loopIndex = 0;
     let totalReps = 10;
+    let loopRep = 0;
     let paused = false;
 
-    function fmt(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = (seconds % 60).toFixed(1).padStart(4, '0');
+    function fmt(s) {
+      const mins = Math.floor(s / 60);
+      const secs = (s % 60).toFixed(1).padStart(4, '0');
       return `${mins}:${secs}`;
+    }
+
+    function setStatus(text) {
+      document.getElementById('status').textContent = text;
+    }
+
+    function setProgress(pct) {
+      document.getElementById('progress').style.width = pct + '%';
     }
 
     function renderLicks() {
@@ -146,24 +163,17 @@
 
       list.querySelectorAll('.lick').forEach(card => {
         card.addEventListener('click', () => {
-          const id = Number(card.dataset.id);
-          selected = licks.find(l => l.id === id) || licks[0];
+          const id = Number(card.dataset.id); 
+          selectedIndex = licks.findIndex(l => l.id === id);
+          selected = licks[selectedIndex] || licks[0];
           renderLicks();
-          updateStatus(`${selected.name} selected`);
+          setStatus(`${selected.name} selected`);
           setProgress(0);
         });
       });
     }
 
-    function updateStatus(msg) {
-      document.getElementById('status').textContent = msg;
-    }
-
-    function setProgress(pct) {
-      document.getElementById('progress').style.width = `${pct}%`;
-    }
-
-    function ensurePlayer() {
+    function initPlayer() {
       if (player) return player;
       player = new YT.Player('player', {
         videoId: VIDEO_ID,
@@ -171,50 +181,53 @@
         events: {
           onReady: () => {
             player.setPlaybackRate(Number(document.getElementById('speed').value));
-            playSelected();
+            previewSelected();
           }
         }
       });
       return player;
     }
 
-    function playSelected() {
-      if (!player || !player.seekTo || !player.playVideo) {
-        return;
-      }
+    function previewSelected() {
+      if (!player || !player.seekTo || !player.playVideo) return;
       player.seekTo(selected.start, true);
       player.setPlaybackRate(Number(document.getElementById('speed').value));
       player.playVideo();
-      updateStatus(`${selected.name} • ${selected.level.toUpperCase()} • ${fmt(selected.start)} → ${fmt(selected.end)}`);
+      setStatus(`${selected.name} • ${selected.level.toUpperCase()} • ${fmt(selected.start)} → ${fmt(selected.end)}`);
     }
 
     function startLoop() {
-      if (!player) {
-        ensurePlayer();
-      }
+      initPlayer();
       totalReps = Math.max(1, Number(document.getElementById('reps').value) || 10);
-      loopIndex = 1;
-      paused = false;
+      loopRep = 1;
       loopRunning = true;
-      playSelected();
-      updateStatus(`${selected.name} • rep ${loopIndex}/${totalReps}`);
+      paused = false;
+      updateLoopStatus();
+      player.seekTo(selected.start, true);
+      player.setPlaybackRate(Number(document.getElementById('speed').value));
+      player.playVideo();
       setProgress(0);
       clearInterval(loopTimer);
       loopTimer = setInterval(checkLoop, 120);
     }
 
+    function updateLoopStatus() {
+      setStatus(`${selected.name} • rep ${loopRep}/${totalReps}`);
+      const pct = ((loopRep - 1) / totalReps) * 100;
+      setProgress(Math.min(100, pct));
+    }
+
     function checkLoop() {
-      if (!loopRunning || !player || !player.getCurrentTime || paused) return;
-      const currentTime = player.getCurrentTime();
-      if (currentTime >= selected.end - 0.15) {
-        loopIndex += 1;
-        if (loopIndex > totalReps) {
+      if (!loopRunning || paused || !player || !player.getCurrentTime) return;
+      const current = player.getCurrentTime();
+      if (current >= selected.end - 0.15) {
+        loopRep += 1;
+        if (loopRep > totalReps) {
           stopLoop();
-          updateStatus('Practice complete — great work!');
+          setStatus('Practice complete — great work!');
           return;
         }
-        updateStatus(`${selected.name} • rep ${loopIndex}/${totalReps}`);
-        setProgress(((loopIndex - 1) / totalReps) * 100);
+        updateLoopStatus();
         player.seekTo(selected.start, true);
         player.playVideo();
       }
@@ -225,40 +238,47 @@
       clearInterval(loopTimer);
       paused = false;
       setProgress(0);
-      if (player && player.pauseVideo) {
-        player.pauseVideo();
-      }
+      if (player && player.pauseVideo) player.pauseVideo();
+      setStatus(`${selected.name} stopped`);
     }
 
     function togglePause() {
-      if (!loopRunning && !player) return;
       if (!player || !player.pauseVideo || !player.playVideo) return;
+      if (!loopRunning && !paused) {
+        previewSelected();
+        return;
+      }
       paused = !paused;
       if (paused) {
         player.pauseVideo();
-        updateStatus(`${selected.name} paused`);
+        setStatus(`${selected.name} paused`);
       } else {
         player.playVideo();
-        updateStatus(`${selected.name} resumed`);
+        if (loopRunning) {
+          setStatus(`${selected.name} • rep ${loopRep}/${totalReps}`);
+        } else {
+          setStatus(`${selected.name} resumed`);
+        }
       }
     }
 
-    document.getElementById('playSelected').addEventListener('click', () => {
-      ensurePlayer();
-      playSelected();
-    });
-
-    document.getElementById('startLoop').addEventListener('click', () => {
-      ensurePlayer();
-      startLoop();
-    });
-
-    document.getElementById('pauseBtn').addEventListener('click', togglePause);
-
-    document.getElementById('stopBtn').addEventListener('click', () => {
+    function goToNextLick() {
+      selectedIndex = (selectedIndex + 1) % licks.length;
+      selected = licks[selectedIndex];
+      renderLicks();
       stopLoop();
-      updateStatus(`${selected.name} stopped`);
+      previewSelected();
+    }
+
+    document.getElementById('previewBtn').addEventListener('click', () => {
+      initPlayer();
+      previewSelected();
     });
+
+    document.getElementById('startBtn').addEventListener('click', startLoop);
+    document.getElementById('pauseBtn').addEventListener('click', togglePause);
+    document.getElementById('stopBtn').addEventListener('click', stopLoop);
+    document.getElementById('nextBtn').addEventListener('click', goToNextLick);
 
     document.getElementById('speed').addEventListener('change', () => {
       if (player && player.setPlaybackRate) {
@@ -266,14 +286,18 @@
       }
     });
 
+    function loadAPI() {
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(script);
+      window.onYouTubeIframeAPIReady = () => {
+        initPlayer();
+      };
+    }
+
     function init() {
       renderLicks();
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
-      window.onYouTubeIframeAPIReady = () => {
-        ensurePlayer();
-      };
+      loadAPI();
     }
 
     init();
