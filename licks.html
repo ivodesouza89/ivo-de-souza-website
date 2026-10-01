@@ -1,325 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Guitar Licks Practice | Ivo de Souza</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0d0e13;--tile:#171923;--tile2:#1f2230;--line:#2a2e40;--text:#f4f4f7;--muted:#9a9fb5;--blue:#5468ff;--sand:#ffd9a0;--green:#4ade80}
-@media (prefers-color-scheme:light){:root{--bg:#eef0f6;--tile:#fff;--tile2:#e4e8f4;--line:#d6dbea;--text:#12141f;--muted:#5d6480}}
-*{box-sizing:border-box;margin:0}
-html{scroll-behavior:smooth}
-body{font-family:"Instrument Sans",Arial,sans-serif;line-height:1.55;color:var(--text);background:var(--bg);padding:1rem 0 3rem}
-.wrap{width:min(1200px,100% - 1.6rem);margin-inline:auto}
-h1{font-family:Syne,Arial,sans-serif;font-weight:800;font-size:clamp(2.2rem,6vw,3.6rem);letter-spacing:-.03em;line-height:1;margin-bottom:1.5rem}
-h2{font-family:Syne,Arial,sans-serif;font-size:1.3rem;letter-spacing:-.02em;margin-bottom:1rem}
-.card{background:var(--tile);border:1px solid var(--line);border-radius:24px;padding:1.6rem;margin-bottom:1.5rem}
-.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem}
-label{font-size:.9rem;color:var(--muted);display:grid;gap:.4rem;font-weight:600}
-input[type="range"],input[type="number"],select{font:inherit;color:var(--text);background:var(--tile2);border:1px solid var(--line);border-radius:12px;padding:.6rem .8rem;width:100%;cursor:pointer}
-input[type="range"]{padding:.4rem 0;height:8px}
-input[type="range"]::-webkit-slider-thumb{width:18px;height:18px;background:var(--blue);border-radius:50%;cursor:pointer}
-input[type="range"]::-moz-range-thumb{width:18px;height:18px;background:var(--blue);border-radius:50%;cursor:pointer;border:0}
-input:focus,select:focus{border-color:var(--blue);outline:0}
-button{font:600 1rem inherit;border:0;border-radius:999px;padding:.7rem 1.4rem;cursor:pointer;background:var(--tile2);color:var(--text);transition:all .2s;white-space:nowrap}
-button:hover{background:var(--tile);filter:brightness(1.15)}
-button.primary{background:var(--blue);color:#fff}
-button.primary:hover{background:var(--blue);filter:brightness(1.2)}
-button.danger{background:#ef4444;color:#fff}
-.video-container{aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;margin-bottom:1.5rem}
-.video-container iframe{width:100%;height:100%;border:0}
-.licks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:2rem}
-.lick-card{background:var(--tile2);border:2px solid var(--line);border-radius:18px;padding:1.4rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
-.lick-card:hover{border-color:var(--blue);transform:translateY(-4px)}
-.lick-card.active{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 15%,var(--tile2))}
-.lick-card.easy{border-left:4px solid #4ade80}
-.lick-card.medium{border-left:4px solid var(--sand)}
-.lick-card.hard{border-left:4px solid #ef4444}
-.difficulty{display:inline-block;font-size:.75rem;font-weight:700;padding:.25rem .6rem;border-radius:999px;margin-bottom:.5rem;text-transform:uppercase}
-.difficulty.easy{background:#4ade80;color:#000}
-.difficulty.medium{background:var(--sand);color:#000}
-.difficulty.hard{background:#ef4444;color:#fff}
-.lick-card h3{font-family:Syne,Arial,sans-serif;font-size:1.3rem;margin-bottom:.5rem}
-.lick-card p{color:var(--muted);font-size:.9rem;margin-bottom:.8rem}
-.lick-info{display:flex;gap:.8rem;font-size:.85rem;color:var(--muted)}
-.lick-info span{display:flex;align-items:center;gap:.3rem}
-.timer{font-family:Syne,Arial,sans-serif;font-size:1.2rem;font-weight:600;color:var(--sand)}
-.player-status{font-family:Syne,Arial,sans-serif;font-size:1.5rem;letter-spacing:-.02em;color:var(--blue);margin:1rem 0;padding:1rem;background:var(--tile2);border-radius:12px;text-align:center}
-.rep-counter{font-size:2rem;font-weight:700;color:var(--sand)}
-.progress-bar{height:6px;background:var(--tile2);border-radius:999px;margin:1rem 0;overflow:hidden}
-.progress-fill{height:100%;background:var(--blue);width:0%;transition:width .15s}
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}
-.modal.active{display:flex}
-.modal-content{background:var(--tile);border:1px solid var(--line);border-radius:24px;padding:2rem;max-width:500px;width:90%;max-height:80vh;overflow-y:auto}
-.modal-content h2{margin-bottom:1rem}
-.modal-content label{margin-bottom:1rem}
-.modal-actions{display:flex;gap:1rem;margin-top:1.5rem;justify-content:flex-end}
-.close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer}
-.info-text{color:var(--muted);font-size:.9rem;margin-bottom:1rem}
-@media (max-width:768px){.controls{grid-template-columns:1fr}.licks-grid{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blues Licks Practice</title>
+  <style>
+    :root{
+      --bg:#0d0e13; --tile:#171923; --tile2:#1f2230; --line:#2a2e40; --text:#f4f4f7;
+      --muted:#9a9fb5; --blue:#5468ff; --green:#4ade80; --sand:#ffd9a0; --red:#ef4444;
+    }
+    *{box-sizing:border-box;margin:0}
+    body{
+      font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text);
+      padding:18px;
+    }
+    .wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
+    .card{background:var(--tile);border:1px solid var(--line);border-radius:22px;padding:18px}
+    h1,h2,h3{font-family:Georgia,serif;letter-spacing:-0.03em}
+    h1{font-size:clamp(2rem,5vw,3.2rem);margin-bottom:8px}
+    .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    label{display:grid;gap:7px;color:var(--muted);font-size:0.9rem}
+    input,select,button{font:inherit}
+    input,select{
+      width:100%; background:var(--tile2); color:var(--text); border:1px solid var(--line); border-radius:12px;
+      padding:10px 12px;
+    }
+    button{
+      border:0;border-radius:999px;padding:11px 18px;cursor:pointer;color:var(--text);background:var(--tile2);
+      transition:transform .15s ease, opacity .15s ease;
+    }
+    button:hover{transform:translateY(-1px)}
+    .primary{background:var(--blue);color:white}
+    .danger{background:var(--red);color:white}
+    .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .videoWrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
+    #player{width:100%;height:100%}
+    .status{font-size:1.2rem;font-weight:700;color:var(--sand);min-height:30px}
+    .progress{height:8px;background:var(--tile2);border-radius:999px;overflow:hidden}
+    .progress span{display:block;height:100%;width:0%;background:var(--blue);transition:width .15s}
+    .licks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+    .lick{background:var(--tile2);border:2px solid var(--line);border-left:6px solid var(--line);border-radius:18px;padding:14px;cursor:pointer;transition:all .15s}
+    .lick:hover{transform:translateY(-2px);border-color:var(--blue)}
+    .lick.active{border-color:var(--blue);background:rgba(84,104,255,.12)}
+    .lick.easy{border-left-color:var(--green)}
+    .lick.medium{border-left-color:var(--sand)}
+    .lick.hard{border-left-color:var(--red)}
+    .tag{display:inline-block;padding:4px 8px;border-radius:999px;font-size:0.72rem;font-weight:700;text-transform:uppercase;margin-bottom:8px}
+    .tag.easy{background:var(--green);color:#0a190a}
+    .tag.medium{background:var(--sand);color:#1b1306}
+    .tag.hard{background:var(--red);color:white}
+    .lick h3{font-size:1.25rem;margin-bottom:6px}
+    .lick p{font-size:0.92rem;color:var(--muted);margin:0}
+    .meta{margin-top:8px;color:var(--muted);font-size:0.8rem;display:flex;justify-content:space-between;gap:8px}
+    @media (max-width:640px){body{padding:12px} .wrap{gap:12px} .card{padding:14px}}
+  </style>
 </head>
 <body>
-<div class="wrap">
-<h1>🎸 Guitar Licks Practice</h1>
-
-<div class="card">
-  <h2>Settings</h2>
-  <div class="controls">
-    <label>Repetitions per lick
-      <input type="number" id="reps" min="1" max="30" value="10">
-    </label>
-    <label>Speed (Playback Rate)
-      <div style="display:flex;gap:.5rem;align-items:center">
-        <input type="range" id="speed" min="0.25" max="2" step="0.25" value="1">
-        <span id="speedDisplay" style="min-width:40px;text-align:center;font-weight:600">1x</span>
-      </div>
-    </label>
-  </div>
-</div>
-
-<div class="card">
-  <h2>Available Licks (Easy → Hard)</h2>
-  <p class="info-text">Click a lick to preview, then click "Start Practice" to begin the training loop.</p>
-  <div class="licks-grid" id="licksGrid"></div>
-</div>
-
-<div class="card">
-  <h2 id="playingTitle" style="display:none">Now Practicing</h2>
-  <div id="playerStatus" class="player-status" style="display:none">
-    <div id="currentLick"></div>
-    <div style="font-size:1rem;color:var(--muted);margin-top:.5rem">Repetition: <span class="rep-counter">0</span> / <span id="totalReps">10</span></div>
-    <div class="progress-bar"><div class="progress-fill"></div></div>
-  </div>
-  
-  <div class="video-container" id="videoContainer" style="display:none">
-    <iframe id="ytPlayer" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
-
-  <div id="controlsBox" style="display:none;margin-top:1rem">
-    <div class="controls">
-      <button id="pauseBtn" class="primary" style="display:none">Pause</button>
-      <button id="resumeBtn" class="primary" style="display:none">Resume</button>
-      <button id="skipBtn" class="primary">Skip to next</button>
-      <button id="stopBtn" class="danger">Stop practice</button>
-    </div>
-  </div>
-</div>
-</div>
-
-<script>
-// Licks data: Easy to Hard
-const licks = [
-  // Easy
-  {id:1, name:"Pentatonic Blues - Single Notes", difficulty:"easy", start:0, end:8, description:"Basic pentatonic scale run"},
-  {id:2, name:"Simple Bend", difficulty:"easy", start:8, end:16, description:"Single string bend technique"},
-  {id:3, name:"Straight Shuffle", difficulty:"easy", start:16, end:24, description:"Classic shuffle rhythm"},
-  // Medium
-  {id:4, name:"Double Bend Lick", difficulty:"medium", start:24, end:32, description:"Two consecutive bends"},
-  {id:5, name:"Vibrato Expression", difficulty:"medium", start:32, end:40, description:"Vibrato and phrasing"},
-  {id:6, name:"Rhythm Shuffle Break", difficulty:"medium", start:40, end:48, description:"Syncopated shuffle pattern"},
-  // Hard
-  {id:7, name:"Fast Runs & Slides", difficulty:"hard", start:48, end:56, description:"Rapid legato and slides"},
-  {id:8, name:"Advanced Bends Combo", difficulty:"hard", start:56, end:64, description:"Complex multi-note bend sequences"},
-  {id:9, name:"Full Lick Combination", difficulty:"hard", start:64, end:75, description:"Complete advanced blues phrase"}
-];
-
-let player, currentLick, practice = {active:false, lickIndex:0, rep:0, timer:null, paused:false};
-const $ = id => document.getElementById(id);
-
-// Initialize
-function init() {
-  renderLicks();
-  $('speed').addEventListener('input', e => {
-    $('speedDisplay').textContent = e.target.value + 'x';
-    if(player && player.setPlaybackRate) player.setPlaybackRate(parseFloat(e.target.value));
-  });
-}
-
-function renderLicks() {
-  const grid = $('licksGrid');
-  grid.innerHTML = licks.map(lick => `
-    <div class="lick-card ${lick.difficulty}" onclick="previewLick(${lick.id})">
-      <span class="difficulty ${lick.difficulty}">${lick.difficulty}</span>
-      <h3>${lick.name}</h3>
-      <p>${lick.description}</p>
-      <div class="lick-info">
-        <span>⏱️ ${lick.end - lick.start}s</span>
-        <span>Start: ${formatTime(lick.start)}</span>
+  <div class="wrap">
+    <div class="card">
+      <h1>Blues licks practice</h1>
+      <div class="controls">
+        <label>
+          Repetitions
+          <input id="reps" type="number" min="1" max="30" value="10">
+        </label>
+        <label>
+          Speed
+          <select id="speed">
+            <option value="0.25">0.25x</option>
+            <option value="0.5">0.5x</option>
+            <option value="0.75">0.75x</option>
+            <option value="1" selected>1x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x</option>
+          </select>
+        </label>
       </div>
     </div>
-  `).join('');
-}
 
-function formatTime(seconds) {
-  const m = Math.floor(seconds / 60);
-  const s = (seconds % 60).toFixed(1).padStart(4, '0');
-  return m + ':' + s;
-}
+    <div class="card">
+      <div class="status" id="status">Select a lick</div>
+      <div class="progress" aria-label="practice progress"><span id="progress"></span></div>
+      <div class="row" style="margin-top:14px;">
+        <button class="primary" id="playSelected">Play selected</button>
+        <button id="startLoop">Start 10x loop</button>
+        <button id="pauseBtn">Pause</button>
+        <button class="danger" id="stopBtn">Stop</button>
+      </div>
+    </div>
 
-function previewLick(lickId) {
-  currentLick = licks.find(l => l.id === lickId);
-  if(!currentLick) return;
-  
-  // Visual feedback
-  document.querySelectorAll('.lick-card').forEach(c => c.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  
-  // Show video and play
-  $('videoContainer').style.display = 'block';
-  $('playerStatus').style.display = 'none';
-  $('controlsBox').style.display = 'none';
-  $('playingTitle').style.display = 'none';
-  
-  if(!player) {
-    const vid = 'Sp6Dk9w0Z1U'; // Default video ID
-    const src = `https://www.youtube.com/embed/${vid}?enablejsapi=1`;
-    $('ytPlayer').src = src;
-    loadYT();
-  }
-  
-  setTimeout(() => {
-    if(player && player.seekTo && player.playVideo) {
-      player.seekTo(currentLick.start, true);
+    <div class="card">
+      <h2>Easy → hard</h2>
+      <div id="licks" class="licks"></div>
+    </div>
+
+    <div class="card">
+      <div class="videoWrap">
+        <div id="player"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const VIDEO_ID = 'Sp6Dk9w0Z1U';
+    const licks = [
+      { id: 1, name: 'Lick 1', level: 'easy', start: 0.0, end: 6.0, note: 'Basic pentatonic motion' },
+      { id: 2, name: 'Lick 2', level: 'easy', start: 6.0, end: 12.0, note: 'Simple bend and release' },
+      { id: 3, name: 'Lick 3', level: 'easy', start: 12.0, end: 18.5, note: 'Light shuffle phrasing' },
+      { id: 4, name: 'Lick 4', level: 'medium', start: 18.5, end: 25.5, note: 'Double-note bend phrase' },
+      { id: 5, name: 'Lick 5', level: 'medium', start: 25.5, end: 32.5, note: 'Vibrato and release' },
+      { id: 6, name: 'Lick 6', level: 'medium', start: 32.5, end: 39.5, note: 'Syncopated rhythm break' },
+      { id: 7, name: 'Lick 7', level: 'hard', start: 39.5, end: 46.5, note: 'Fast legato run' },
+      { id: 8, name: 'Lick 8', level: 'hard', start: 46.5, end: 53.5, note: 'Advanced bend combination' },
+      { id: 9, name: 'Lick 9', level: 'hard', start: 53.5, end: 60.5, note: 'Full phrase with all moves' }
+    ];
+
+    let selected = licks[0];
+    let player = null;
+    let loopTimer = null;
+    let loopRunning = false;
+    let loopIndex = 0;
+    let totalReps = 10;
+    let paused = false;
+
+    function fmt(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = (seconds % 60).toFixed(1).padStart(4, '0');
+      return `${mins}:${secs}`;
+    }
+
+    function renderLicks() {
+      const list = document.getElementById('licks');
+      list.innerHTML = licks.map(lick => `
+        <div class="lick ${lick.level} ${selected.id === lick.id ? 'active' : ''}" data-id="${lick.id}">
+          <div class="tag ${lick.level}">${lick.level}</div>
+          <h3>${lick.name}</h3>
+          <p>${lick.note}</p>
+          <div class="meta">
+            <span>${fmt(lick.start)} → ${fmt(lick.end)}</span>
+            <span>${(lick.end - lick.start).toFixed(1)}s</span>
+          </div>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.lick').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = Number(card.dataset.id);
+          selected = licks.find(l => l.id === id) || licks[0];
+          renderLicks();
+          updateStatus(`${selected.name} selected`);
+          setProgress(0);
+        });
+      });
+    }
+
+    function updateStatus(msg) {
+      document.getElementById('status').textContent = msg;
+    }
+
+    function setProgress(pct) {
+      document.getElementById('progress').style.width = `${pct}%`;
+    }
+
+    function ensurePlayer() {
+      if (player) return player;
+      player = new YT.Player('player', {
+        videoId: VIDEO_ID,
+        playerVars: { rel: 0, playsinline: 1, enablejsapi: 1 },
+        events: {
+          onReady: () => {
+            player.setPlaybackRate(Number(document.getElementById('speed').value));
+            playSelected();
+          }
+        }
+      });
+      return player;
+    }
+
+    function playSelected() {
+      if (!player || !player.seekTo || !player.playVideo) {
+        return;
+      }
+      player.seekTo(selected.start, true);
+      player.setPlaybackRate(Number(document.getElementById('speed').value));
       player.playVideo();
-      player.setPlaybackRate(parseFloat($('speed').value));
+      updateStatus(`${selected.name} • ${selected.level.toUpperCase()} • ${fmt(selected.start)} → ${fmt(selected.end)}`);
     }
-  }, 500);
-}
 
-function startPractice() {
-  if(!currentLick) {
-    alert('Please select a lick first');
-    return;
-  }
-  
-  const totalReps = parseInt($('reps').value) || 10;
-  practice = {active:true, lickIndex:0, rep:1, timer:null, paused:false, totalReps};
-  
-  $('playingTitle').style.display = 'block';
-  $('playerStatus').style.display = 'block';
-  $('controlsBox').style.display = 'block';
-  $('videoContainer').style.display = 'block';
-  $('pauseBtn').style.display = 'inline-block';
-  $('resumeBtn').style.display = 'none';
-  
-  playRepetition();
-}
-
-function playRepetition() {
-  if(!practice.active) return;
-  
-  const rep = practice.rep;
-  const total = practice.totalReps;
-  
-  $('currentLick').textContent = `${currentLick.name} • Rep ${rep}/${total}`;
-  $('.rep-counter').textContent = rep;
-  $('#totalReps').textContent = total;
-  $('.progress-fill').style.width = ((rep - 1) / total * 100) + '%';
-  
-  if(player && player.seekTo && player.playVideo) {
-    player.seekTo(currentLick.start, true);
-    player.playVideo();
-    player.setPlaybackRate(parseFloat($('speed').value));
-  }
-  
-  clearInterval(practice.timer);
-  practice.timer = setInterval(checkPlayback, 100);
-}
-
-function checkPlayback() {
-  if(!practice.active || practice.paused) return;
-  if(!player || !player.getCurrentTime || !player.getPlayerState) return;
-  
-  const currentTime = player.getCurrentTime();
-  const endTime = currentLick.end;
-  
-  if(currentTime >= endTime - 0.1) {
-    practice.rep++;
-    if(practice.rep > practice.totalReps) {
-      stopPractice();
-      $('playerStatus').textContent = '✅ Practice complete! Great work!';
-      return;
+    function startLoop() {
+      if (!player) {
+        ensurePlayer();
+      }
+      totalReps = Math.max(1, Number(document.getElementById('reps').value) || 10);
+      loopIndex = 1;
+      paused = false;
+      loopRunning = true;
+      playSelected();
+      updateStatus(`${selected.name} • rep ${loopIndex}/${totalReps}`);
+      setProgress(0);
+      clearInterval(loopTimer);
+      loopTimer = setInterval(checkLoop, 120);
     }
-    playRepetition();
-  }
-}
 
-function pausePractice() {
-  practice.paused = true;
-  $('pauseBtn').style.display = 'none';
-  $('resumeBtn').style.display = 'inline-block';
-  if(player && player.pauseVideo) player.pauseVideo();
-}
+    function checkLoop() {
+      if (!loopRunning || !player || !player.getCurrentTime || paused) return;
+      const currentTime = player.getCurrentTime();
+      if (currentTime >= selected.end - 0.15) {
+        loopIndex += 1;
+        if (loopIndex > totalReps) {
+          stopLoop();
+          updateStatus('Practice complete — great work!');
+          return;
+        }
+        updateStatus(`${selected.name} • rep ${loopIndex}/${totalReps}`);
+        setProgress(((loopIndex - 1) / totalReps) * 100);
+        player.seekTo(selected.start, true);
+        player.playVideo();
+      }
+    }
 
-function resumePractice() {
-  practice.paused = false;
-  $('pauseBtn').style.display = 'inline-block';
-  $('resumeBtn').style.display = 'none';
-  if(player && player.playVideo) player.playVideo();
-}
+    function stopLoop() {
+      loopRunning = false;
+      clearInterval(loopTimer);
+      paused = false;
+      setProgress(0);
+      if (player && player.pauseVideo) {
+        player.pauseVideo();
+      }
+    }
 
-function stopPractice() {
-  practice.active = false;
-  clearInterval(practice.timer);
-  if(player && player.pauseVideo) player.pauseVideo();
-  
-  $('playingTitle').style.display = 'none';
-  $('playerStatus').style.display = 'none';
-  $('controlsBox').style.display = 'none';
-  document.querySelectorAll('.lick-card').forEach(c => c.classList.remove('active'));
-}
+    function togglePause() {
+      if (!loopRunning && !player) return;
+      if (!player || !player.pauseVideo || !player.playVideo) return;
+      paused = !paused;
+      if (paused) {
+        player.pauseVideo();
+        updateStatus(`${selected.name} paused`);
+      } else {
+        player.playVideo();
+        updateStatus(`${selected.name} resumed`);
+      }
+    }
 
-// YouTube API
-function loadYT() {
-  if(window.YT && window.YT.Player) {
-    player = new YT.Player('ytPlayer', {
-      events: {
-        'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange
+    document.getElementById('playSelected').addEventListener('click', () => {
+      ensurePlayer();
+      playSelected();
+    });
+
+    document.getElementById('startLoop').addEventListener('click', () => {
+      ensurePlayer();
+      startLoop();
+    });
+
+    document.getElementById('pauseBtn').addEventListener('click', togglePause);
+
+    document.getElementById('stopBtn').addEventListener('click', () => {
+      stopLoop();
+      updateStatus(`${selected.name} stopped`);
+    });
+
+    document.getElementById('speed').addEventListener('change', () => {
+      if (player && player.setPlaybackRate) {
+        player.setPlaybackRate(Number(document.getElementById('speed').value));
       }
     });
-  } else {
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-    window.onYouTubeIframeAPIReady = () => {
-      player = new YT.Player('ytPlayer', {
-        events: {'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange}
-      });
-    };
-  }
-}
 
-function onPlayerReady(event) {
-  player = event.target;
-}
+    function init() {
+      renderLicks();
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+      window.onYouTubeIframeAPIReady = () => {
+        ensurePlayer();
+      };
+    }
 
-function onPlayerStateChange(event) {}
-
-// Event listeners
-document.addEventListener('DOMContentLoaded', init);
-document.querySelectorAll('.lick-card').forEach(card => {
-  card.addEventListener('dblclick', startPractice);
-});
-
-// Make functions global
-window.previewLick = previewLick;
-window.startPractice = startPractice;
-window.pausePractice = pausePractice;
-window.resumePractice = resumePractice;
-window.stopPractice = stopPractice;
-
-$('pauseBtn').onclick = pausePractice;
-$('resumeBtn').onclick = resumePractice;
-$('skipBtn').onclick = () => {
-  practice.rep++;
-  if(practice.rep > practice.totalReps) stopPractice();
-  else playRepetition();
-};
-$('stopBtn').onclick = stopPractice;
-</script>
+    init();
+  </script>
 </body>
 </html>
