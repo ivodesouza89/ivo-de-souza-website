@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blues licks practice loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0e13;--tile:#171923;--tile2:#1f2230;--line:#2a2e40;--text:#f4f4f7;--muted:#9a9fb5;--blue:#5468ff;--sand:#ffd9a0}
+@media (prefers-color-scheme:light){:root{--bg:#eef0f6;--tile:#fff;--tile2:#e4e8f4;--line:#d6dbea;--text:#12141f;--muted:#5d6480}}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Instrument Sans",Arial,sans-serif;line-height:1.55;color:var(--text);background:var(--bg);padding:1rem 0 3rem}
+.wrap{width:min(1000px,100% - 1.6rem);margin-inline:auto;display:grid;gap:.9rem}
+h1{font-family:Syne,Arial,sans-serif;font-weight:800;font-size:clamp(1.9rem,5vw,3rem);letter-spacing:-.03em;line-height:1}
+h2{font-family:Syne,Arial,sans-serif;font-size:1.2rem;margin-bottom:.7rem}
+.t{background:var(--tile);border:1px solid var(--line);border-radius:24px;padding:1.2rem}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:end}
+label{font-size:.85rem;color:var(--muted);display:grid;gap:.2rem}
+input,select{font:inherit;color:var(--text);background:var(--tile2);border:1px solid transparent;border-radius:12px;padding:.55rem .7rem;min-width:0}
+input:focus,select:focus{border-color:var(--blue);outline:0}
+button{font:600 .95rem inherit;font-family:inherit;border:0;border-radius:999px;padding:.6rem 1.1rem;cursor:pointer;background:var(--tile2);color:var(--text)}
+button.p{background:var(--blue);color:#fff}button:hover{filter:brightness(1.15)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.video{aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000}.video iframe{width:100%;height:100%}
+#status{font-family:Syne,Arial,sans-serif;font-size:clamp(1.3rem,4vw,2rem);letter-spacing:-.02em;color:var(--sand);min-height:2.4rem}
+.bar{height:8px;border-radius:99px;background:var(--tile2);overflow:hidden;margin-top:.5rem}.bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .15s}
+.seg{display:grid;grid-template-columns:1.4fr .8fr .8fr auto auto;gap:.4rem;align-items:center;margin-bottom:.5rem}
+.seg.on{outline:2px solid var(--blue);outline-offset:4px;border-radius:12px}
+.chk{display:flex;gap:.9rem;flex-wrap:wrap}.chk label{display:flex;align-items:center;gap:.35rem;color:var(--text);font-size:1rem}
+.note{color:var(--muted);font-size:.9rem}
+@media (max-width:640px){.seg{grid-template-columns:1fr 1fr}.seg input:first-child{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Blues licks practice loop</h1>
+
+<div class="t"><div class="row">
+<label style="flex:1;min-width:240px">YouTube link<input id="url" value="https://www.youtube.com/watch?v=Sp6Dk9w0Z1U"></label>
+<button class="p" id="load">Load video</button></div></div>
+
+<div class="t"><div class="video"><div id="yt"></div></div>
+<div id="status" aria-live="polite">Load the video, then mark your licks.</div><div class="bar"><i id="prog"></i></div></div>
+
+<div class="t"><h2>1. Break the video into licks</h2>
+<p class="note" style="margin-bottom:.8rem">Play the video, press <b>Mark start</b> and <b>Mark end</b> around each lick, then <b>Add lick</b>. Or split the whole video into equal parts and fine-tune the times.</p>
+<div class="row" style="margin-bottom:1rem">
+<label>Name<input id="dn" placeholder="Lick 1" style="width:130px"></label>
+<label>Start<input id="ds" placeholder="0:00.0" style="width:90px"></label>
+<label>End<input id="de" placeholder="0:00.0" style="width:90px"></label>
+<button id="ms">Mark start</button><button id="me">Mark end</button><button class="p" id="add">Add lick</button></div>
+<div class="row" style="margin-bottom:1rem"><label>Equal parts<input id="np" type="number" min="2" max="40" value="6" style="width:80px"></label><button id="split">Split video</button></div>
+<div id="list"></div></div>
+
+<div class="t"><h2>2. Practice plan</h2>
+<div class="row">
+<label>Repetitions per lick<input id="reps" type="number" min="1" max="99" value="10" style="width:90px"></label>
+<label>Order<select id="order"><option value="lick">Each lick: slow to fast, then next lick</option><option value="speed">Whole sequence at one speed, then faster</option></select></label></div>
+<div class="chk" style="margin:.9rem 0"><span class="note">Speeds:</span>
+<label><input class="sp" type="checkbox" value="0.5" checked>0.5x</label><label><input class="sp" type="checkbox" value="0.75" checked>0.75x</label><label><input class="sp" type="checkbox" value="1" checked>1x</label><label><input class="sp" type="checkbox" value="0.25">0.25x</label><label><input class="sp" type="checkbox" value="1.25">1.25x</label></div>
+<div class="row"><button class="p" id="go">Start practice</button><button id="pause">Pause</button><button id="skip">Skip step</button><button id="stop">Stop</button></div>
+<p class="note" id="summary" style="margin-top:.8rem"></p></div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let player,vid,segs=[],plan=[],pi=0,rep=0,reps=10,timer,locked=0,paused=false;
+const idFrom=u=>{const m=u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:/^[\w-]{11}$/.test(u.trim())?u.trim():null};
+const parseT=s=>{s=String(s).trim();if(!s)return NaN;const p=s.split(":").map(Number);return p.some(isNaN)?NaN:p.reduce((a,v)=>a*60+v,0)};
+const fmt=t=>{const m=Math.floor(t/60);return m+":"+(t-m*60).toFixed(1).padStart(4,"0")};
+const say=t=>$("status").textContent=t;
+const save=()=>{try{localStorage.setItem("licks:"+vid,JSON.stringify(segs))}catch(e){}};
+const read=()=>{try{return JSON.parse(localStorage.getItem("licks:"+vid))||[]}catch(e){return[]}};
+
+function load(){const v=idFrom($("url").value);if(!v){say("That does not look like a YouTube link.");return}
+ stop();vid=v;segs=read();render();
+ if(player&&player.cueVideoById)player.cueVideoById(vid);
+ else player=new YT.Player("yt",{videoId:vid,width:"100%",height:"100%",playerVars:{rel:0,playsinline:1}});
+ say("Ready. Play the video and mark your licks.")}
+window.onYouTubeIframeAPIReady=load;
+
+function render(){const l=$("list");l.innerHTML="";
+ if(!segs.length)l.innerHTML='<p class="note">No licks yet.</p>';
+ segs.forEach((s,i)=>{const d=document.createElement("div");d.className="seg";d.id="seg"+i;
+  d.innerHTML=`<input value="${s.name.replace(/"/g,"&quot;")}" aria-label="Name"><input value="${fmt(s.start)}" aria-label="Start"><input value="${fmt(s.end)}" aria-label="End"><button>Preview</button><button aria-label="Delete lick">Delete</button>`;
+  const [n,a,b,pv,del]=d.children;
+  n.onchange=()=>{s.name=n.value;save()};
+  a.onchange=()=>{const v=parseT(a.value);if(!isNaN(v))s.start=v;a.value=fmt(s.start);save()};
+  b.onchange=()=>{const v=parseT(b.value);if(!isNaN(v))s.end=v;b.value=fmt(s.end);save()};
+  pv.onclick=()=>run([{seg:s,sp:1,i}],1);
+  del.onclick=()=>{segs.splice(i,1);save();render()};l.appendChild(d)});
+ $("summary").textContent=""}
+
+$("ms").onclick=()=>{if(player&&player.getCurrentTime)$("ds").value=fmt(player.getCurrentTime())};
+$("me").onclick=()=>{if(player&&player.getCurrentTime)$("de").value=fmt(player.getCurrentTime())};
+$("add").onclick=()=>{const a=parseT($("ds").value),b=parseT($("de").value);
+ if(isNaN(a)||isNaN(b)||b<=a){say("Set a start and an end (end after start).");return}
+ segs.push({name:$("dn").value.trim()||"Lick "+(segs.length+1),start:a,end:b});
+ $("dn").value=$("ds").value=$("de").value="";save();render()};
+$("split").onclick=()=>{const d=player&&player.getDuration?player.getDuration():0,n=+$("np").value;
+ if(!d){say("Load the video first and press play once so the length is known.");return}
+ if(segs.length&&!confirm("Replace your current licks?"))return;
+ segs=Array.from({length:n},(_,i)=>({name:"Lick "+(i+1),start:d/n*i,end:d/n*(i+1)}));save();render()};
+
+function build(){const sp=[...document.querySelectorAll(".sp:checked")].map(c=>+c.value).sort((a,b)=>a-b),out=[];
+ const ok=segs.map((s,i)=>({seg:s,i})).filter(x=>x.seg.end>x.seg.start);
+ if($("order").value==="lick")ok.forEach(x=>sp.forEach(v=>out.push({seg:x.seg,sp:v,i:x.i})));
+ else sp.forEach(v=>ok.forEach(x=>out.push({seg:x.seg,sp:v,i:x.i})));return out}
+function run(p,r){if(!player||!player.seekTo){say("Load the video first.");return}
+ clearInterval(timer);plan=p;reps=r;pi=0;paused=false;$("pause").textContent="Pause";step();timer=setInterval(tick,100)}
+function step(){const s=plan[pi];rep=1;locked=Date.now()+400;
+ player.setPlaybackRate(s.sp);player.seekTo(s.seg.start,true);player.playVideo();label();
+ document.querySelectorAll(".seg").forEach(e=>e.classList.remove("on"));const e=$("seg"+s.i);if(e)e.classList.add("on")}
+function label(){const s=plan[pi];say(`${s.seg.name} · ${s.sp}x · rep ${rep}/${reps}`);
+ $("prog").style.width=((pi*reps+rep-1)/(plan.length*reps)*100)+"%"}
+function tick(){if(paused||Date.now()<locked||player.getPlayerState()!==1)return;
+ const s=plan[pi];if(player.getCurrentTime()<s.seg.end-.06)return;
+ rep++;locked=Date.now()+400;
+ if(rep>reps){pi++;if(pi>=plan.length){stop();say("Done. Great work!");$("prog").style.width="100%";return}step()}
+ else{player.seekTo(s.seg.start,true);label()}}
+function stop(){clearInterval(timer);plan=[];if(player&&player.pauseVideo){player.pauseVideo();player.setPlaybackRate(1)}$("prog").style.width="0"}
+
+$("load").onclick=load;
+$("go").onclick=()=>{const p=build();if(!p.length){say("Add at least one lick and one speed.");return}
+ const r=Math.max(1,+$("reps").value||10);$("summary").textContent=`${p.length} steps × ${r} repetitions = ${p.length*r} plays.`;run(p,r)};
+$("pause").onclick=()=>{if(!plan.length)return;paused=!paused;paused?player.pauseVideo():player.playVideo();$("pause").textContent=paused?"Resume":"Pause"};
+$("skip").onclick=()=>{if(!plan.length)return;pi++;if(pi>=plan.length){stop();say("Done. Great work!");return}step()};
+$("stop").onclick=()=>{stop();say("Stopped.")};
+</script>
+<script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>
